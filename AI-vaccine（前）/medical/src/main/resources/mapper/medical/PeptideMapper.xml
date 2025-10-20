@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.medical.mapper.PeptideMapper">
+    
+    <resultMap type="Peptide" id="PeptideResult">
+        <result property="id"    column="id"    />
+        <result property="hla"    column="hla"    />
+        <result property="peptide"    column="peptide"    />
+        <result property="binding"    column="binding"    />
+        <result property="prediction"    column="prediction"    />
+        <result property="score"    column="score"    />
+        <result property="thermodynamic"    column="thermodynamic"    />
+        <result property="xAxis"    column="x_axis"    />
+        <result property="yAxis"    column="y_axis"    />
+        <result property="yPred"    column="y_pred"    />
+        <result property="yProb"    column="y_prob"    />
+        <result property="maxValue"    column="max_value"    />
+        <result property="minValue"    column="min_value"    />
+        <result property="modelType"    column="model_type"    />
+        <result property="changeFlag"    column="change_flag"    />
+        <result property="chainNum"    column="chain_num"    />
+        <result property="startNum"    column="start_num"    />
+        <result property="myModel"    column="my_model"    />
+        <result property="originalStructure"    column="original_structure"    />
+        <result property="isTcr"    column="is_tcr"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPeptideVo">
+        select id, hla, peptide, binding, prediction, score, thermodynamic, x_axis, y_axis, y_pred, y_prob, max_value,
+               min_value, model_type, change_flag, chain_num, start_num, my_model, original_structure, is_tcr, create_by,
+               create_time, update_by, update_time from peptide
+    </sql>
+
+    <select id="selectPeptideList" parameterType="Peptide" resultMap="PeptideResult">
+        <include refid="selectPeptideVo"/>
+        <where>  
+            <if test="hla != null  and hla != ''"> and hla like concat('%', #{hla}, '%')</if>
+            <if test="peptide != null  and peptide != ''"> and peptide like concat('%', #{peptide}, '%')</if>
+            <if test="modelType != null and modelType != ''"> and model_type = #{modelType}</if>
+            <if test="changeFlag != null and changeFlag != ''"> and change_flag = #{changeFlag}</if>
+            <if test="isTcr != null"> and is_tcr = #{isTcr}</if>
+        </where>
+        order by y_prob desc
+    </select>
+    
+    <select id="selectPeptideById" parameterType="Long" resultMap="PeptideResult">
+        <include refid="selectPeptideVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPeptide" parameterType="Peptide" useGeneratedKeys="true" keyProperty="id">
+        insert into peptide
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="hla != null">hla,</if>
+            <if test="peptide != null">peptide,</if>
+            <if test="binding != null">binding,</if>
+            <if test="prediction != null">prediction,</if>
+            <if test="score != null">score,</if>
+            <if test="thermodynamic != null">thermodynamic,</if>
+            <if test="xAxis != null">x_axis,</if>
+            <if test="yAxis != null">y_axis,</if>
+            <if test="yPred != null">y_pred,</if>
+            <if test="yProb != null">y_prob,</if>
+            <if test="maxValue != null">max_value,</if>
+            <if test="minValue != null">min_value,</if>
+            <if test="modelType != null">model_type,</if>
+            <if test="changeFlag != null">change_flag,</if>
+            <if test="chainNum != null">chain_num,</if>
+            <if test="startNum != null">start_num,</if>
+            <if test="myModel != null">my_model,</if>
+            <if test="originalStructure != null">original_structure,</if>
+            <if test="isTcr != null">is_tcr,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="hla != null">#{hla},</if>
+            <if test="peptide != null">#{peptide},</if>
+            <if test="binding != null">#{binding},</if>
+            <if test="prediction != null">#{prediction},</if>
+            <if test="score != null">#{score},</if>
+            <if test="thermodynamic != null">#{thermodynamic},</if>
+            <if test="xAxis != null">#{xAxis},</if>
+            <if test="yAxis != null">#{yAxis},</if>
+            <if test="yPred != null">#{yPred},</if>
+            <if test="yProb != null">#{yProb},</if>
+            <if test="maxValue != null">#{maxValue},</if>
+            <if test="minValue != null">#{minValue},</if>
+            <if test="modelType != null">#{modelType},</if>
+            <if test="changeFlag != null">#{changeFlag},</if>
+            <if test="chainNum != null">#{chainNum},</if>
+            <if test="startNum != null">#{startNum},</if>
+            <if test="myModel != null">#{myModel},</if>
+            <if test="originalStructure != null">#{originalStructure},</if>
+            <if test="isTcr != null">#{isTcr},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePeptide" parameterType="Peptide">
+        update peptide
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hla != null">hla = #{hla},</if>
+            <if test="peptide != null">peptide = #{peptide},</if>
+            <if test="binding != null">binding = #{binding},</if>
+            <if test="prediction != null">prediction = #{prediction},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="thermodynamic != null">thermodynamic = #{thermodynamic},</if>
+            <if test="changeFlag != null">change_flag = #{changeFlag},</if>
+            <if test="originalStructure != null">original_structure = #{originalStructure},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePeptideById" parameterType="Long">
+        delete from peptide where id = #{id}
+    </delete>
+
+    <delete id="deletePeptideByIds" parameterType="String">
+        delete from peptide where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
